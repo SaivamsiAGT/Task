@@ -6,6 +6,11 @@ tableextension 72456 SalesHeadercustomefield extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+
+        field(72546; CustomField_Task8; Code[35])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
 

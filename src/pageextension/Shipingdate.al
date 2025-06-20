@@ -6,5 +6,9 @@ tableextension 70313 SalesHeaderExt extends "Sales Header"
         {
             Caption = 'Last Shipment Date';
         }
+        field(50100; LastInvoiceNo; Code[20])
+        {
+            Caption = 'Last Invoice No';
+        }
     }
 }
