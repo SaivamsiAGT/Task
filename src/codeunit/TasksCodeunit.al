@@ -75,20 +75,20 @@ codeunit 70311 Tasks
         SalesInvoiceHeader: Record "Sales Invoice Header";
         SalesHeader: Record "Sales Header";
     begin
-        Message('🔁 G/L Entry Event Triggered');
+        Message('G/L Entry Event Triggered');
 
         if GLEntry."Document Type" = GLEntry."Document Type"::Invoice then begin
             if SalesInvoiceHeader.Get(GLEntry."Document No.") then begin
                 if SalesInvoiceHeader."Order No." <> '' then begin
                     if SalesHeader.Get(SalesHeader."Document Type"::Order, SalesInvoiceHeader."Order No.") then begin
                         GLEntry."External Document No." := SalesHeader.CustomField_Task8;
-                        Message('✅ Copied from Sales Header: %1', SalesHeader.CustomField_Task8);
+                        Message('Copied from Sales Header: %1', SalesHeader.CustomField_Task8);
                     end else
-                        Message('⚠️ Order not found: %1', SalesInvoiceHeader."Order No.");
+                        Message('Order not found: %1', SalesInvoiceHeader."Order No.");
                 end else
-                    Message('⚠️ No Order No. in Invoice: %1', GLEntry."Document No.");
+                    Message('No Order No. in Invoice: %1', GLEntry."Document No.");
             end else
-                Message('❌ Invoice not found: %1', GLEntry."Document No.");
+                Message('Invoice not found: %1', GLEntry."Document No.");
         end;
     end;
 }
