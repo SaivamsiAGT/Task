@@ -10,5 +10,9 @@ tableextension 70320 Saleslinecustomefield extends "Sales Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(5089; Delivery; Code[20])
+        {
+            Caption = 'Delivery-Mode';
+        }
     }
 }
