@@ -2,12 +2,12 @@ codeunit 70311 Tasks
 {
     //Task -1
 
-    // [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterValidateEvent', 'E-Mail', false, false)]
-    //     local procedure OnAfterEmailValidate(var Rec: Record Customer; xRec: Record Customer)
-    //     begin
-    //         if Rec."E-Mail" <> xRec."E-Mail" then
-    //             Message('Email was entered sucessfully : %1', Rec."E-Mail");
-    //     end;
+    // [EventSubscriber(ObjectType::Table, Database::Customer, 'OnAfterValidateEvent', 'Name', false, false)]
+    // local procedure OnAfterEmailValidate(var Rec: Record Customer; xRec: Record Customer)
+    // begin
+    //     if Rec.Name <> xRec.Name then
+    //         Message('Name was entered sucessfully : %1', Rec.Name);
+    // end;
 
     //Task - 2
 
@@ -111,10 +111,52 @@ codeunit 70311 Tasks
     //     end;
     // end;
 
-    //Task - 7
-    // [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnBeforeInitDefaultDimensionSources', '', false, false)]
-    // local procedure SetSalespersonDimensionByLoad(
-    //   this is correct event for task 7
+    //  Task - 7
+    // [EventSubscriber(ObjectType::Table, Database::"Sales Header", 'OnAfterInitDefaultDimensionSources', '', false, false)]
+    // local procedure OnAfterInitDefaultDimensionSources(
+    //  var SalesHeader: Record "Sales Header";
+    //  var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]];
+    //  FieldNo: Integer)
+    // var
+    //     Salesperson: Record "Salesperson/Purchaser";
+    //     SalesInvoiceHeader: Record "Sales Invoice Header";
+    //     SalesHeaderTemp: Record "Sales Header";
+    //     CalcDimension: Dictionary of [Code[20], Integer];
+    //     Key1: Code[20];
+    //     Value: Integer;
+    //     CurrCount: Integer;
+    //     MinValue: Integer;
+    //     SelectedPerson: Code[20];
+    // begin
+    //     if Salesperson.FindSet() then
+    //         repeat
+    //             CurrCount := 0;
+
+    //             SalesHeaderTemp.Reset();
+    //             SalesHeaderTemp.SetRange("Salesperson Code", Salesperson.Code);
+    //             CurrCount += SalesHeaderTemp.Count();
+
+    //             SalesInvoiceHeader.Reset();
+    //             SalesInvoiceHeader.SetRange("Salesperson Code", Salesperson.Code);
+    //             CurrCount += SalesInvoiceHeader.Count();
+
+    //             CalcDimension.Add(Salesperson.Code, CurrCount);
+    //         until Salesperson.Next() = 0;
+
+    //     MinValue := 9999999;
+    //     foreach Key1 in CalcDimension.Keys do begin
+    //         Value := CalcDimension.Get(Key1);
+    //         if Value < MinValue then begin
+    //             MinValue := Value;
+    //             SelectedPerson := Key1;
+    //         end;
+    //     end;
+
+    //     Message('Least loaded Salesperson: %1 with %2 total docs', SelectedPerson, MinValue);
+
+    //     SalesHeader."Salesperson Code" := SelectedPerson;
+    // end;
+
 
 
 
@@ -174,7 +216,7 @@ codeunit 70311 Tasks
     //     end
     // end;
 
-    // //Task - 9,10
+    //Task - 9,10
     // [EventSubscriber(ObjectType::Table, Database::"Purchase Header", OnBeforeOnInsert, '', true, true)]
     // local procedure OnBeforeOnInsert1(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
     // begin
@@ -184,39 +226,24 @@ codeunit 70311 Tasks
     // end;
 
 
-    //Task - 10  , Pending 
+    // //Task - 10  
 
-    // [EventSubscriber(ObjectType::Table, Database::"Item Ledger Entry", OnAfterInsertEvent, '', true, true)]
-    // local procedure MyProcedure1(var Rec: Record "Item Ledger Entry")
+    // [EventSubscriber(ObjectType::Table, Database::"Item Ledger Entry", OnBeforeInsertEvent, '', true, true)]
+    // local procedure OnAfterInsertILE(var Rec: Record "Item Ledger Entry")
     // var
-    //     PurchaseLine: Record "Purchase Line";
-    //     PurchaseHeader: Record "Purchase Header";
+    //     PurchRcptHeader: Record "Purch. Rcpt. Header";
+    //     PurchHeader: Record "Purchase Header";
     // begin
-    //     Message('Task 11 event triggered');
-    //     Message('1  -    %1,', PurchaseLine."Document Type"::Invoice);
-    //     Message('2   -   %1,', Rec."Document No.");
+    //     if Rec."Document Type" = Rec."Document Type"::"Purchase Receipt" then begin
+    //         if PurchRcptHeader.Get(Rec."Document No.") then begin
+    //             if PurchHeader.Get(PurchHeader."Document Type"::Order, PurchRcptHeader."Order No.") then begin
+    //                 Message('Purchase Header found! Vendor: %1', PurchHeader."Buy-from Vendor No.");
+    //                 rec.Purchase_customefield := PurchHeader.Purchase_custome_field;
 
-    //     //Rec."Document Type" = Rec."Document Type"::"Purchase Invoice" then begin
-    //     PurchaseLine.SetRange("Document Type", PurchaseLine."Document Type"::Invoice);
-    //     PurchaseLine.SetRange("Document No.", Rec."Document No.");
-    //     // PurchaseLine.SetRange("Line No.", Rec."Order Line No.");
-
-
-    //     if PurchaseLine.FindSet() then begin
-
-    //         Message('3           -      %1,', PurchaseHeader."No.");
-    //         if PurchaseHeader.Get(PurchaseLine."Document Type", PurchaseLine."Document No.") then begin
-    //             Message(' Hello Vamsi Reddy! Found Purchase Header: %1', PurchaseHeader."No.");
-    //         end else begin
-    //             Message('Purchase Header not found');
-    //         end;
-    //     end else begin
-    //         Message(' No matching Purchase Line found');
-    //     end;
-    // end;// else begin
-    //     //     Message('Not a Purchase Invoice related Item Ledger Entry');
-    //end;
-    //  end;
+    //             end;
+    //         end
+    //     end
+    // end;
 
 
     //  Task-11
@@ -231,25 +258,77 @@ codeunit 70311 Tasks
 
     //Task -12
 
-    [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, "No.", true, true)]
-    local procedure MyProcedure(var Rec: Record "Sales Line")
-    var
-        salesheader: Record "Sales Header";
-    begin
-        Message('Onaftervalideat event triggered');
-        salesheader.SetRange("Document Type", salesheader."Document Type"::Order);
-        SalesHeader.SetRange("No.", Rec."Document No.");
-        if salesheader.FindFirst() then begin
-            if salesheader.Delivery <> '' then begin
-                Rec.Delivery := salesheader.Delivery;
-                Message(rec.Delivery);
-                rec.Modify(true);
-            end
-            else begin
-                Message('No nothing is there');
-            end;
-        end;
-    end;
+    // [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, "No.", true, true)]
+    // local procedure MyProcedure(var Rec: Record "Sales Line")
+    // var
+    //     salesheader: Record "Sales Header";
+    // begin
+    //     Message('Onaftervalideat event triggered');
+    //     salesheader.SetRange("Document Type", salesheader."Document Type"::Order);
+    //     SalesHeader.SetRange("No.", Rec."Document No.");
+    //     if salesheader.FindFirst() then begin
+    //         if salesheader.Delivery <> '' then begin
+    //             Rec.Delivery := salesheader.Delivery;
+    //             Message(rec.Delivery);
+    //             rec.Modify(true);
+    //         end
+    //         else begin
+    //             Message('No nothing is there');
+    //         end;
+    //     end;
+    // end;
+
+    //Task -13
+
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeInsertInvoiceHeader, '', true, true)]
+    // local procedure OnBeforeInsertInvoiceHeader(SalesHeader: Record "Sales Header"; var SalesInvHeader: Record "Sales Invoice Header"; var IsHandled: Boolean)
+    // var
+    //     customer: Record Customer;
+    //     custLedgerEntry: Record "Cust. Ledger Entry";
+    //     permission: Record "Access Control";
+    //     count: Integer;
+    //     currentUserSecurityId: Guid;
+    // begin
+    //     customer.GET(SalesHeader."Sell-to Customer No.");
+    //     customer.CalcFields("Balance Due (LCY)");
+
+    //     custLedgerEntry.SetRange("Customer No.", customer."No.");
+    //     custLedgerEntry.SetRange(Open, true);
+    //     custLedgerEntry.SetFilter("Due Date", '<%1', Today);
+    //     if custLedgerEntry.FindSet() then
+    //         repeat
+    //             count += 1;
+    //         until custLedgerEntry.Next() = 0;
+
+
+    //     if (customer."Balance Due (LCY)" > 10000) or (count > 3) then begin
+    //         if not Confirm('This customer has an overdue balance of ₹%1 and %2 overdue invoices. Do you want to continue?', false, customer."Balance Due (LCY)", count) then
+    //             Error('Posting cancelled by user.');
+
+    //         currentUserSecurityId := UserSecurityId();
+
+
+    //         permission.Reset();
+    //         permission.SetRange("User Security ID", currentUserSecurityId);
+    //         permission.SetRange("Role ID", 'SUPER');
+    //         if not permission.FindFirst() then
+    //             Error('Only users with SUPER permission can override this block.');
+    //     end;
+    // end;
+
+
+    //Task -14
+    // [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, DateCustomeField, true, true)]
+    // local procedure MyProcedure(var Rec: Record "Sales Line")
+    // var
+    //     salesheader: Record "Sales Header";
+    // begin
+    //     if Rec.DateCustomeField <> '' then begin
+    //         Rec."Shipment Date" := Rec."Shipment Date" - 2;
+    //         Rec.Modify(true);
+    //     end
+    // end;
+
 
     //Task -15
     // [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterInsertEvent', '', true, true)]

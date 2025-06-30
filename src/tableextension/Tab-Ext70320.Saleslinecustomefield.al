@@ -14,5 +14,9 @@ tableextension 70320 Saleslinecustomefield extends "Sales Line"
         {
             Caption = 'Delivery-Mode';
         }
+        field(506; DateCustomeField; code[20])
+        {
+
+        }
     }
 }
