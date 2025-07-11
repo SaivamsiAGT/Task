@@ -1,19 +1,19 @@
 pageextension 70322 MyExtension extends "Posted Sales Shipment Lines"
 {
-    // layout
-    // {
-    //     addafter(Quantity)
-    //     {
-    //         field(MyCustomField1; Rec.MyCustomField1)
-    //         {
-    //             ApplicationArea = all;
-    //         }
-    //         field(MyCustomField2; Rec.MyCustomField2)
-    //         {
-    //             ApplicationArea = all;
-    //         }
-    //     }
-    // }
+    layout
+    {
+        addafter(Quantity)
+        {
+            field("Shipment Instruction"; Rec."Shipment Instruction")
+            {
+                ApplicationArea = all;
+            }
+            field("Sales Reference Code"; Rec."Sales Reference Code")
+            {
+                ApplicationArea = all;
+            }
+        }
+    }
 
 
 }

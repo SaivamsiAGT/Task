@@ -2,19 +2,29 @@ tableextension 70320 Saleslinecustomefield extends "Sales Line"
 {
     fields
     {
-        field(500; MyCustomField_1; Text[80])
+        field(500; "Sales Reference Code"; Text[80])
         {
             DataClassification = ToBeClassified;
         }
-        field(501; MyCustomField_2; Text[80])
+        field(501; "Shipment Instruction"; Text[80])
         {
             DataClassification = ToBeClassified;
         }
-        field(5089; Delivery; Code[20])
+        field(5089; Delivery; code[20])
         {
-            Caption = 'Delivery-Mode';
+            DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                SalesHeader: Record "Sales Header";
+            begin
+                SalesHeader.Get("Document Type", "Document No.");
+                if SalesHeader.Status <> SalesHeader.Status::Open then
+                    Error('The order must be open to modify Delivery.');
+
+            end;
         }
-        field(506; DateCustomeField; code[20])
+        field(506; PlannedShipmentDate; Date)
         {
 
         }

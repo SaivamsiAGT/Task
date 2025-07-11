@@ -6,6 +6,10 @@ tableextension 70330 PurchaceExtension extends "Purchase Header"
         {
 
         }
+        field(503; "Buyer Name"; code[45])
+        {
+
+        }
     }
 
 

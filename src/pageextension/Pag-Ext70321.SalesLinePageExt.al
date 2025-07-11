@@ -8,7 +8,7 @@ pageextension 70321 SalesLinePageExt extends "Sales Order Subform"
             {
                 ApplicationArea = All;
             }
-            field(DateCustomeField; Rec.DateCustomeField)
+            field(PlannedShipmentDate; Rec.PlannedShipmentDate)
             {
                 ApplicationArea = all;
             }

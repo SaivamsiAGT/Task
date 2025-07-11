@@ -4,11 +4,15 @@ pageextension 70325 SalesHeader extends "Sales Order"
     {
         addafter("Sell-to Address")
         {
-            field(Delivery; Rec.Delivery)
-            {
+            // field(Delivery; Rec.Delivery)
+            // {
 
+            //     ApplicationArea = all;
+            //     Editable = IsEditableDelivery;
+            // }
+            field("Custom Ref"; Rec."Custom Ref")
+            {
                 ApplicationArea = all;
-                Editable = IsEditableDelivery;
             }
         }
     }
