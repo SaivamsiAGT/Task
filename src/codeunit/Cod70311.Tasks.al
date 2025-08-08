@@ -338,64 +338,46 @@ codeunit 70311 Tasks
     //     end;
     // end;
 
-    //Event-17
-
-    [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, 'Quantity', true, true)]
-    local procedure AutoAdjustItemInventory(var Rec: Record "Sales Line")
-    var
-        ItemLedgerEntry: Record "Item Ledger Entry";
-        ItemJnlLine: Record "Item Journal Line";
-        ItemJnlPostLine: Codeunit "Item Jnl.-Post Line";
-        TotalQty: Decimal;
-        QtyToAdjust: Decimal;
-        LineNo: Integer;
-    begin
-        // Exit if not an item line
-        if Rec.Type <> Rec.Type::Item then
-            exit;
-
-        // Calculate total available quantity in that location
-        ItemLedgerEntry.Reset();
-        ItemLedgerEntry.SetRange("Item No.", Rec."No.");
-        ItemLedgerEntry.SetRange("Location Code", Rec."Location Code");
-        if ItemLedgerEntry.FindSet() then
-            repeat
-                TotalQty += ItemLedgerEntry.Quantity;
-            until ItemLedgerEntry.Next() = 0;
-
-        // If not enough quantity, do a Positive Adjustment
-        if Rec.Quantity > TotalQty then begin
-            QtyToAdjust := Rec.Quantity - TotalQty;
-
-            Message('Inventory shortfall detected: Required = %1, Available = %2. Adjusting %3.',
-                Rec.Quantity, TotalQty, QtyToAdjust);
-
-            ItemJnlLine.Init();
-            ItemJnlLine."Journal Template Name" := 'ITEM';
-            ItemJnlLine."Journal Batch Name" := 'DEFAULT';
-            LineNo := ItemJnlLine."Line No." + 10000;
-            ItemJnlLine."Line No." := LineNo;
-            ItemJnlLine.Validate("Posting Date", Today);
-            ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::"Positive Adjmt.");
-            ItemJnlLine.Validate("Document No.", 'AUTOADJ' + Format(Today, 0, 9));
-            ItemJnlLine.Validate("Item No.", Rec."No.");
-            ItemJnlLine.Validate("Location Code", Rec."Location Code");
-            ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure Code");
-            ItemJnlLine.Validate(Quantity, QtyToAdjust);
-            ItemJnlLine.Insert(true);
-            ItemJnlPostLine.RunWithCheck(ItemJnlLine);
-            Message('Inventory adjusted by %1 units for item %2.', QtyToAdjust, Rec."No.");
-        end;
-    end;
-
-    // // Task -18
-
-    // [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, "Location Code", true, true)]
-    // local procedure OnAfterValidate_PlannedShipmentDate(var Rec: Record "Sales Line")
+    // //Event-17
+    // [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, 'Quantity', true, true)]
+    // local procedure AutoAdjustItemInventory(var Rec: Record "Sales Line")
+    // var
+    //     ItemLedgerEntry: Record "Item Ledger Entry";
+    //     ItemJnlLine: Record "Item Journal Line";
+    //     ItemJnlPostLine: Codeunit "Item Jnl.-Post Line";
+    //     TotalQty: Decimal;
+    //     QtyToAdjust: Decimal;
+    //     LineNo: Integer;
     // begin
-    //     Message('yes location code');
+    //     if Rec.Type <> Rec.Type::Item then
+    //         exit;
+    //     ItemLedgerEntry.Reset();
+    //     ItemLedgerEntry.SetRange("Item No.", Rec."No.");
+    //     ItemLedgerEntry.SetRange("Location Code", Rec."Location Code");
+    //     if ItemLedgerEntry.FindSet() then
+    //         repeat
+    //             TotalQty += ItemLedgerEntry.Quantity;
+    //         until ItemLedgerEntry.Next() = 0;
+    //     if Rec.Quantity > TotalQty then begin
+    //         QtyToAdjust := Rec.Quantity - TotalQty;
+    //         Message('Inventory shortfall detected: Required = %1, Available = %2. Adjusting %3.', Rec.Quantity, TotalQty, QtyToAdjust);
+    //         ItemJnlLine.Init();
+    //         ItemJnlLine."Journal Template Name" := 'ITEM';
+    //         ItemJnlLine."Journal Batch Name" := 'DEFAULT';
+    //         ItemJnlLine.Validate("Posting Date", Today);
+    //         ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::"Positive Adjmt.");
+    //         ItemJnlLine.Validate("Document No.", 'AUTOADJ' + Format(Today, 0, 9));
+    //         ItemJnlLine.Validate("Item No.", Rec."No.");
+    //         ItemJnlLine.Validate("Location Code", Rec."Location Code");
+    //         ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure Code");
+    //         ItemJnlLine.Validate(Quantity, QtyToAdjust);
+    //         ItemJnlLine.Insert(true);
+    //         ItemJnlPostLine.RunWithCheck(ItemJnlLine);
+    //         Message('Inventory adjusted by %1 units for item %2.', QtyToAdjust, Rec."No.");
+    //     end;
     // end;
 
+    // //Task -18
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnBeforeReleaseSalesDoc, '', true, true)]
     // local procedure OnBeforeRunReleaseSalesDoc(var SalesHeader: Record "Sales Header")
     // var
@@ -420,8 +402,7 @@ codeunit 70311 Tasks
     //     UserLog.Insert();
     // end;
 
-    //Task-19
-
+    // //Task-19
     // [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterValidateEvent', 'Quantity', true, true)]
     // local procedure InsertManualReservation(var rec: Record "Sales Line"; xrec: Record "Sales Line")
     // var
@@ -456,7 +437,7 @@ codeunit 70311 Tasks
     //     Message('Manual Reservation Entry created for %1 - Line %2', rec."No.", rec."Line No.");
     // end;
 
-    // Task-20
+    // // Task-20
 
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterSalesInvLineInsert, '', true, true)]
     // local procedure topassvalue(var SalesHeader: Record "Sales Header")
@@ -500,10 +481,9 @@ codeunit 70311 Tasks
     //         until PurchaseLine.Next() = 0;
     // end;
 
-    //Task - 21
+    // //Task - 21
     // [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnBeforeTestStatusOpen', '', true, true)]
     // local procedure OnBeforeTestStatusOpen(var SalesLine: Record "Sales Line"; var SalesHeader: Record "Sales Header"; var IsHandled: Boolean; xSalesLine: Record "Sales Line"; CallingFieldNo: Integer; var StatusCheckSuspended: Boolean)
-
     // var
     //     ReleaseSalesDoc: Codeunit "Release Sales Document";
     // begin
@@ -527,7 +507,7 @@ codeunit 70311 Tasks
     //     salesaheader.Modify(true);
     // end;
 
-    // Task-22
+    // // Task-22
     // [EventSubscriber(ObjectType::Page, Page::"Purchase Order Subform", OnAfterValidateEvent, "No.", true, true)]
     // local procedure MyProcedure(var Rec: Record "Purchase Line")
     // var
@@ -541,144 +521,134 @@ codeunit 70311 Tasks
     // end;
 
     // // Task-23
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnAfterReleaseSalesDoc, '', true, true)]
+    local procedure AutoShipAfterRelease(var SalesHeader: Record "Sales Header")
+    var
+        SalesPost: Codeunit "Sales-Post";
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            SalesHeader."Posting Date" := Today;
+            SalesHeader.Ship := true;
+            SalesHeader.Invoice := false;
+            SalesPost.SetPostingFlags(SalesHeader);
+            SalesPost.Run(SalesHeader);
+        end;
+    end;
 
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnAfterReleaseSalesDoc, '', true, true)]
-    // local procedure AutoShipAfterRelease(var SalesHeader: Record "Sales Header")
-    // var
-    //     SalesPost: Codeunit "Sales-Post";
-    // begin
-    //     if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
-    //         SalesHeader."Posting Date" := Today;
-    //         SalesHeader.Ship := true;
-    //         SalesHeader.Invoice := false;
-    //         SalesPost.SetPostingFlags(SalesHeader);
-    //         SalesPost.Run(SalesHeader);
-    //     end;
-    // end;
-
-    //Task -24
-    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnAfterReleaseSalesDoc, '', false, false)]
-    // local procedure OnAfterReleaseSalesDocumentHandler(SalesHeader: Record "Sales Header")
-    // var
-    //     PurchHeader: Record "Purchase Header";
-    //     PurchLine: Record "Purchase Line";
-    //     SalesLine: Record "Sales Line";
-    //     VendorNo: Code[20];
-    //     LineNo: Integer;
-    // begin
-    //     if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
-    //         exit;
-
-
-    //     VendorNo := '40000';
-    //     PurchHeader.Init();
-    //     PurchHeader."Document Type" := PurchHeader."Document Type"::Quote;
-    //     PurchHeader.Insert(true);
-    //     PurchHeader.Validate("Buy-from Vendor No.", VendorNo);
-    //     PurchHeader.Validate("Document Date", Today);
-    //     PurchHeader.Modify(true);
-
-    //     SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
-    //     SalesLine.SetRange("Document No.", SalesHeader."No.");
-
-    //     LineNo := 10000;
-    //     if SalesLine.FindSet() then begin
-    //         repeat
-    //             PurchLine.Init();
-    //             PurchLine."Document Type" := PurchHeader."Document Type";
-    //             PurchLine."Document No." := PurchHeader."No.";
-    //             PurchLine."Line No." := LineNo;
-    //             PurchLine.Validate("Type", SalesLine."Type");
-    //             PurchLine.Validate("No.", SalesLine."No.");
-    //             PurchLine.Validate(Quantity, SalesLine.Quantity);
-    //             PurchLine.Insert();
-    //             LineNo += 10000;
-    //         until SalesLine.Next() = 0;
-    //     end;
-
-    //     Message('Purchase Quote %1 created for Sales Order %2.', PurchHeader."No.", SalesHeader."No.");
-    // end;
-
-    //Task-26
-    // [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, 'Quantity', true, true)]
-    // local procedure MyProcedure4(var Rec: Record "Sales Line")
-    // var
-    //     ItemLedgerEntry: Record "Item Ledger Entry";
-    //     PurchaseHeader: Record "Purchase Header";
-    //     PurchaseLine: Record "Purchase Line";
-    //     count: Decimal;
-    //     QtyToOrder: Decimal;
-    //     ConfirmCreate: Boolean;
-    // begin
-    //     if Rec.Type <> Rec.Type::Item then
-    //         exit;
-    //     ItemLedgerEntry.Reset();
-    //     ItemLedgerEntry.SetRange("Item No.", Rec."No.");
-    //     ItemLedgerEntry.SetRange("Location Code", Rec."Location Code");
-    //     if ItemLedgerEntry.FindSet() then
-    //         repeat
-    //             count += ItemLedgerEntry.Quantity;
-    //         until ItemLedgerEntry.Next() = 0;
-    //     Message('Available inventory for item %1 at location %2 is: %3', Rec."No.", Rec."Location Code", count);
-    //     if Rec.Quantity > count then begin
-    //         QtyToOrder := Rec.Quantity - count;
-    //         ConfirmCreate := Confirm(
-    //             'Stock is insufficient. Only %1 available. Do you want to create a Purchase Order for remaining %2?',
-    //             false, count, QtyToOrder);
-    //         if not ConfirmCreate then
+    //     //Task -24
+    //     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnAfterReleaseSalesDoc, '', false, false)]
+    //     local procedure OnAfterReleaseSalesDocumentHandler(SalesHeader: Record "Sales Header")
+    //     var
+    //         PurchHeader: Record "Purchase Header";
+    //         PurchLine: Record "Purchase Line";
+    //         SalesLine: Record "Sales Line";
+    //         VendorNo: Code[20];
+    //         LineNo: Integer;
+    //     begin
+    //         if SalesHeader."Document Type" <> SalesHeader."Document Type"::Order then
     //             exit;
-    //         PurchaseHeader.Init();
-    //         PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Order;
-    //         PurchaseHeader.Validate("Buy-from Vendor No.", '10000');
-    //         PurchaseHeader.Insert(true);
-    //         PurchaseLine.Init();
-    //         PurchaseLine."Document Type" := PurchaseHeader."Document Type";
-    //         PurchaseLine."Document No." := PurchaseHeader."No.";
-    //         PurchaseLine.Type := PurchaseLine.Type::Item;
-    //         PurchaseLine.Validate("No.", Rec."No.");
-    //         PurchaseLine.Validate(Quantity, QtyToOrder);
-    //         PurchaseLine.Insert(true);
-    //         Message('Purchase Order %1 created for item %2, quantity %3.', PurchaseHeader."No.", Rec."No.", QtyToOrder);
+
+    //         VendorNo := '40000';
+    //         PurchHeader.Init();
+    //         PurchHeader."Document Type" := PurchHeader."Document Type"::Quote;
+    //         PurchHeader.Insert(true);
+    //         PurchHeader.Validate("Buy-from Vendor No.", VendorNo);
+    //         PurchHeader.Validate("Document Date", Today);
+    //         PurchHeader.Modify(true);
+    //         SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+    //         SalesLine.SetRange("Document No.", SalesHeader."No.");
+
+    //        // LineNo := 10000;
+    //         if SalesLine.FindSet() then begin
+    //             repeat
+    //                 PurchLine.Init();
+    //                 PurchLine."Document Type" := PurchHeader."Document Type";
+    //                 PurchLine."Document No." := PurchHeader."No.";
+    //               //  PurchLine."Line No." := LineNo;
+    //                 PurchLine.Validate("Type", SalesLine."Type");
+    //                 PurchLine.Validate("No.", SalesLine."No.");
+    //                 PurchLine.Validate(Quantity, SalesLine.Quantity);
+    //                 PurchLine.Insert();
+    //                // LineNo += 10000;
+    //             until SalesLine.Next() = 0;
+    //         end;
+    //         Message('Purchase Quote %1 created for Sales Order %2.', PurchHeader."No.", SalesHeader."No.");
     //     end;
-    // end;
 
-
-
-    //Task 27
-    // [EventSubscriber(ObjectType::Table, Database::"Sales Invoice Line", 'OnAfterInitFromSalesLine', '', true, true)]
-    // local procedure AppendNameToLastLineOnly(
-    //  var SalesInvLine: Record "Sales Invoice Line";
-    //  SalesInvHeader: Record "Sales Invoice Header";
-    //  SalesLine: Record "Sales Line")
-    // var
-    //     TempSalesLine: Record "Sales Line";
-    //     MaxLineNo: Integer;
-    // begin
-
-    //     TempSalesLine.Reset();
-    //     TempSalesLine.SetRange("Document Type", SalesLine."Document Type");
-    //     TempSalesLine.SetRange("Document No.", SalesLine."Document No.");
-    //     if TempSalesLine.FindLast() then
-    //         MaxLineNo := TempSalesLine."Line No.";
-
-    //     if SalesLine."Line No." = MaxLineNo then begin
-    //         SalesInvLine.Description := SalesInvLine.Description + ' @saivamsi';
+    //     //Task-26
+    //   //  Creating a purchase order when the quantity entered in asales order's line for an item exceeds the quantity ininventory for that item .
+    //   [EventSubscriber(ObjectType::Page, Page::"Sales Order Subform", OnAfterValidateEvent, 'Quantity', true, true)]
+    //     local procedure MyProcedure4(var Rec: Record "Sales Line")
+    //     var
+    //         ItemLedgerEntry: Record "Item Ledger Entry";
+    //         PurchaseHeader: Record "Purchase Header";
+    //         PurchaseLine: Record "Purchase Line";
+    //         count: Decimal;
+    //         QtyToOrder: Decimal;
+    //         ConfirmCreate: Boolean;
+    //     begin
+    //         if Rec.Type <> Rec.Type::Item then
+    //             exit;
+    //         ItemLedgerEntry.Reset();
+    //         ItemLedgerEntry.SetRange("Item No.", Rec."No.");
+    //         ItemLedgerEntry.SetRange("Location Code", Rec."Location Code");
+    //         if ItemLedgerEntry.FindSet() then
+    //             repeat
+    //                 count += ItemLedgerEntry.Quantity;
+    //             until ItemLedgerEntry.Next() = 0;
+    //         Message('Available inventory for item %1 at location %2 is: %3', Rec."No.", Rec."Location Code", count);
+    //         if Rec.Quantity > count then begin
+    //             QtyToOrder := Rec.Quantity - count;
+    //             ConfirmCreate := Confirm(
+    //                 'Stock is insufficient. Only %1 available. Do you want to create a Purchase Order for remaining %2?',
+    //                 false, count, QtyToOrder);
+    //             if not ConfirmCreate then
+    //                 exit;
+    //             PurchaseHeader.Init();
+    //             PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Order;
+    //             PurchaseHeader.Validate("Buy-from Vendor No.", '10000');
+    //             PurchaseHeader.Insert(true);
+    //             PurchaseLine.Init();
+    //             PurchaseLine."Document Type" := PurchaseHeader."Document Type";
+    //             PurchaseLine."Document No." := PurchaseHeader."No.";
+    //             PurchaseLine.Type := PurchaseLine.Type::Item;
+    //             PurchaseLine.Validate("No.", Rec."No.");
+    //             PurchaseLine.Validate(Quantity, QtyToOrder);
+    //             PurchaseLine.Insert(true);
+    //             Message('Purchase Order %1 created for item %2, quantity %3.', PurchaseHeader."No.", Rec."No.", QtyToOrder);
+    //         end;
     //     end;
-    // end;
 
+    //     //Task 27
+    //     [EventSubscriber(ObjectType::Table, Database::"Sales Invoice Line", 'OnAfterInitFromSalesLine', '', true, true)]
+    //     local procedure AppendNameToLastLineOnly(
+    //      var SalesInvLine: Record "Sales Invoice Line";
+    //      SalesInvHeader: Record "Sales Invoice Header";
+    //      SalesLine: Record "Sales Line")
+    //     var
+    //         TempSalesLine: Record "Sales Line";
+    //         MaxLineNo: Integer;
+    //     begin
+
+    //         TempSalesLine.Reset();
+    //         TempSalesLine.SetRange("Document Type", SalesLine."Document Type");
+    //         TempSalesLine.SetRange("Document No.", SalesLine."Document No.");
+    //         if TempSalesLine.FindLast() then
+    //             MaxLineNo := TempSalesLine."Line No.";
+    //         if SalesLine."Line No." = MaxLineNo then begin
+    //             SalesInvLine.Description := SalesInvLine.Description + ' @saivamsi';
+    //         end;
+    //     end;
 
     //Task -28
-
-    //   [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnInsertPostedHeadersOnAfterInsertInvoiceHeader', '', true, true)]
+    // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnInsertPostedHeadersOnAfterInsertInvoiceHeader', '', true, true)]
     // local procedure OnInsertPostedHeadersOnAfterInsertInvoiceHeader(var SalesHeader: Record "Sales Header"; var SalesInvoiceHeader: Record "Sales Invoice Header")
     // begin
     //     Message('Triggered salesinvoce header');
     //     SalesInvoiceHeader."Custom Ref" := SalesHeader."Custom Ref";
     // end;
 
-
     //Task - 29
-
     // [EventSubscriber(ObjectType::Table, Database::"Customer", 'OnBeforeModifyEvent', '', false, false)]
     // local procedure UpdateReferencedIdsCustomerOnModify(var Rec: Record Customer; var xRec: Record Customer; RunTrigger: Boolean)
     // var
@@ -693,16 +663,13 @@ codeunit 70311 Tasks
     //     creditlog.Insert();
     // end;
 
-
-
     //Task- 30
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post (Yes/No)", 'OnBeforeRunSalesPost', '', true, true)]
-    // local procedure HandleBeforeRunSalesPost(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean; var SuppressCommit: Boolean)
+    // local procedure HandleBeforeRunSalesPost1(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean; var SuppressCommit: Boolean)
     // var
     //     customer: Record Customer;
     //     custLedgerEntry: Record "Cust. Ledger Entry";
     //     TotalDue: Decimal;
-
     // begin
     //     customer.GET(SalesHeader."Sell-to Customer No.");
     //     custLedgerEntry.Reset();
@@ -717,15 +684,13 @@ codeunit 70311 Tasks
     //         until custLedgerEntry.Next() = 0;
     //     customer.CalcFields("Balance Due (LCY)");
     //     TotalDue += customer."Balance Due (LCY)";
-    //     if TotalDue < customer."Credit Limit (LCY)" then begin
+    //     if TotalDue > customer."Credit Limit (LCY)" then begin
     //         Error('Sorry You exceded the credit limit you cannot post the order');
     //         IsHandled := true;
     //     end;
     // end;
 
-
-
-    //Task -31 
+    // //Task -31 
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post (Yes/No)", 'OnBeforeRunSalesPost', '', true, true)]
     // local procedure HandleBeforeRunSalesPost(var SalesHeader: Record "Sales Header"; var IsHandled: Boolean; var SuppressCommit: Boolean)
     // var
@@ -734,7 +699,9 @@ codeunit 70311 Tasks
     // begin
     //     Message('Posting is about to start the process: %1 , %2', SalesHeader."No.", SalesHeader."Document Type");
     //     salesline.Reset();
+    //     salesline.SetCurrentKey("Document Type");
     //     salesline.SetRange("Document Type", SalesHeader."Document Type");
+    //     salesline.SetCurrentKey("Document No.");
     //     salesline.SetRange("Document No.", SalesHeader."No.");
     //     if salesline.FindSet() then begin
     //         Item.Get(salesline."No.");
@@ -747,4 +714,12 @@ codeunit 70311 Tasks
     // end;
 
 
+
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", OnBeforeValidateUnitCostLCYOnGetUnitCost, '', false, false)]
+    local procedure OnBeforeValidateUnitCostLCYOnGetUnitCost1(var IsHandled: Boolean; var SalesLine: Record "Sales Line"; Item: Record Item)
+    begin
+        Message('called 1');
+        IsHandled := true;
+    end;
 }

@@ -1,0 +1,25 @@
+=Code.SetData( Cstr(Fields!Order_No_.Value) + Chr(177) + 
+    Cstr(Fields!Sell_to_City.Value) + Chr(177) +  
+    Cstr(Fields!Sell_to_Country_Region_Code.Value) + Chr(177) + 
+    Cstr(Fields!Ship_to_Address.Value) + Chr(177) + 
+    Cstr(Fields!Ship_to_Code.Value) + Chr(177) + 
+    Cstr(Fields!Ship_to_Contact.Value) + Chr(177) + 
+    Cstr(Fields!Prepmt__Payment_Terms_Code.Value) + Chr(177) + 
+    Cstr(Fields!companyName.Value) + Chr(177) +  
+    Cstr(Fields!companyAddress.Value) + Chr(177) +  
+    Cstr(Fields!companyCountry.Value) + Chr(177) +  
+    Cstr(Fields!companyE_Mail.Value) + Chr(177) +  
+    Cstr(Fields!customer_Name.Value) + Chr(177) +  
+    Cstr(Fields!Address.Value) + Chr(177) +  
+    Cstr(Fields!No_.Value) + Chr(177) + 
+    Cstr(Fields!Description.Value) + Chr(177) + 
+    Cstr(Fields!Quantity.Value) + Chr(177) +  
+    Cstr(Fields!Unit_of_Measure.Value) + Chr(177) + 
+    Cstr(Fields!Unit_Cost.Value) + Chr(177) + 
+    Cstr(Fields!Line_Amount.Value) + Chr(177) + 
+    Cstr(Fields!Subtotal.Value) + Chr(177) + 
+    Cstr(Fields!Tax.Value) + Chr(177) + 
+    Cstr(Fields!Total_USD.Value) + Chr(177) + 
+    Cstr(Fields!Inv__Discount_Amount.Value)+ Chr(177) +
+    Cstr(Fields!Bill_to_County.Value)+ Chr(177) +
+    Cstr(Fields!payment_Description.Value)   , 1)

@@ -1,0 +1,24 @@
+=Code.SetData(CStr(Fields!Invoice_No_.Value) + Chr(177) +
+    CStr(Fields!Sell_to_Customer_Name.Value) + Chr(177) +
+    CStr(Fields!Bill_to_Contact.Value) + Chr(177) +
+    CStr(Fields!Posting_Date.Value) + Chr(177) +
+    CStr(Fields!Order_No_.Value) + Chr(177) +
+    CStr(Fields!Due_Date.Value) + Chr(177) +
+    CStr(Fields!item_No_.Value) + Chr(177) +
+    CStr(Fields!Description.Value) + Chr(177) +
+    CStr(Fields!Quantity.Value) + Chr(177) +
+    CStr(Fields!Unit_Price.Value) + Chr(177) +
+    CStr(Fields!Amount_Including_VAT.Value) + Chr(177) +
+    CStr(Fields!Line_Amount.Value) + Chr(177) +
+    CStr(Fields!Ship_to_Name.Value) + Chr(177) +
+    CStr(Fields!Ship_to_Address.Value) + Chr(177) +
+    CStr(Fields!Ship_to_City.Value) + Chr(177) +
+    CStr(Fields!Ship_to_Country_Region_Code.Value) + Chr(177) +
+    CStr(Fields!customer_Name.Value) + Chr(177) +
+    CStr(Fields!customer_Address.Value) + Chr(177) +
+    CStr(Fields!customer_City.Value) + Chr(177) +
+    CStr(Fields!customer_Country_Region_Code.Value) + Chr(177) +
+    CStr(Fields!customer_Post_Code.Value) + Chr(177) +
+    CStr(Fields!Bill_to_Customer_No_.Value),
+    1
+)

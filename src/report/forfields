@@ -1,0 +1,23 @@
+=Code.SetData(Cstr(Fields!No_.Value) + Chr(177) +
+Cstr(Fields!Buy_from_Vendor_No_.Value) + Chr(177) +
+Cstr(Fields!Buy_from_Contact.Value) + Chr(177) +
+Cstr(Fields!Buy_from_Post_Code.Value) + Chr(177) +
+Cstr(Fields!Vendor_Invoice_No_.Value) + Chr(177) +
+Cstr(Fields!Vendor_Order_No_.Value) + Chr(177) +
+Cstr(Fields!Order_Date.Value) + Chr(177) +
+Cstr(Fields!item_No_.Value) + Chr(177) +
+Cstr(Fields!Description.Value) + Chr(177) +
+Cstr(Fields!Unit_of_Measure.Value) + Chr(177) +
+Cstr(Fields!vendor_Name.Value) + Chr(177) +
+Cstr(Fields!Contact.Value) + Chr(177) +
+Cstr(Fields!Address.Value) + Chr(177) +
+Cstr(Fields!City.Value) + Chr(177) +
+Cstr(Fields!country_Name.Value) + Chr(177) +
+Cstr(Fields!company_name.Value) + Chr(177) +
+Cstr(Fields!company_address.Value) + Chr(177) +
+Cstr(Fields!company_satae.Value) + Chr(177) +
+Cstr(Fields!ship_Name.Value) + Chr(177) +
+Cstr(Fields!ship_Address.Value) + Chr(177) +
+Cstr(Fields!ship_City.Value) + Chr(177) +
+Cstr(Fields!ship_Post_Code.Value)+ Chr(177) + 
+Cstr(Fields!PageCaption.Value) , 1)

@@ -27,5 +27,9 @@ tableextension 70313 SalesHeaderExt extends "Sales Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(78945; "Total Amount"; Decimal)
+        {
+
+        }
     }
 }

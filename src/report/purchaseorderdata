@@ -1,0 +1,27 @@
+=Code.SetData( CStr(Fields!Subtotal.Value) + Chr(177) +
+    CStr(Fields!Total_USD.Value) + Chr(177) +
+    CStr(Fields!Tax.Value) + Chr(177) +
+    CStr(Fields!compinfo1.Value) + Chr(177) +
+    CStr(Fields!compinfo2.Value) + Chr(177) +
+    CStr(Fields!compinfo3.Value) + Chr(177) +
+    CStr(Fields!compinfo4.Value) + Chr(177) +
+    CStr(Fields!Purchase_No_.Value) + Chr(177) +
+    CStr(Fields!Buy_from_Vendor_No_.Value) + Chr(177) +
+    CStr(Fields!Location_Code.Value) + Chr(177) +
+    CStr(Fields!Due_Date.Value) + Chr(177) +
+    CStr(Fields!Buy_from_Vendor_Name.Value) + Chr(177) +
+    CStr(Fields!No_purchase.Value) + Chr(177) +
+    CStr(Fields!Description.Value) + Chr(177) +
+    CStr(Fields!Quantity.Value) + Chr(177) +
+    CStr(Fields!Unit_of_Measure.Value) + Chr(177) +
+    CStr(Fields!Direct_Unit_Cost.Value) + Chr(177) +
+    CStr(Fields!Line_Amount.Value) + Chr(177) +
+    CStr(Fields!Inv__Discount_Amount.Value) + Chr(177) +
+    CStr(Fields!Address.Value) + Chr(177) +
+    CStr(Fields!Contact.Value) + Chr(177) +
+    CStr(Fields!City.Value) + Chr(177) +
+    CStr(Fields!Post_Code.Value) + Chr(177) +
+    CStr(Fields!Name1.Value) + Chr(177) +
+    CStr(Fields!County_Name.Value) + Chr(177) +
+    CStr(Fields!shiptoName.Value),
+"")

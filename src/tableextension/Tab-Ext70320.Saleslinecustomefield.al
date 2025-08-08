@@ -21,7 +21,6 @@ tableextension 70320 Saleslinecustomefield extends "Sales Line"
                 SalesHeader.Get("Document Type", "Document No.");
                 if SalesHeader.Status <> SalesHeader.Status::Open then
                     Error('The order must be open to modify Delivery.');
-
             end;
         }
         field(506; PlannedShipmentDate; Date)

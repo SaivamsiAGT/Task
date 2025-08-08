@@ -12,6 +12,10 @@ pageextension 70321 SalesLinePageExt extends "Sales Order Subform"
             {
                 ApplicationArea = all;
             }
+            field("Unit Cost (LCY) 1"; Rec."Unit Cost (LCY)")
+            {
+                ApplicationArea = all;
+            }
         }
     }
 
